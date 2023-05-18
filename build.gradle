@@ -85,13 +85,9 @@ signing {
     sign(publishing.publications.mavenJava)
 }
 
-test {
-    useJUnitPlatform()
-}
-
 jar {
     manifest {
-        baseName 'testplugin'
+        archivesBaseName 'testplugin'
         version ''
         attributes 'Main-Class': 'com.atatctech.hsps.TestPlugin'
     }
