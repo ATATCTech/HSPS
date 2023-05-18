@@ -1,19 +1,98 @@
 plugins {
     id 'java'
+    id 'maven-publish'
+    id 'signing'
 }
 
+apply plugin: 'maven-publish'
+
 group 'com.atatctech'
-version '1.0-SNAPSHOT'
+version '1.0.0'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    implementation 'org.jetbrains:annotations:23.0.0'
+    implementation 'com.atatctech:arsa:1.1.9'
+    testImplementation 'com.atatctech:packages:1.0.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
 
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+javadoc {
+    options.addStringOption('charset', 'UTF-8')
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = 'hsps'
+            description = 'A hot swappable plugin system.'
+            from components.java
+
+            pom {
+                name = 'HSPS'
+                description = 'A hot swappable plugin system.'
+                url = 'https://github.com/ATATCTech/HSPS'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'ATATCTech'
+                        name = 'ATATCTech'
+                        email = 'email@atatctech.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git:github.com/ATATCTech/HSPS.git'
+                    developerConnection = 'scm:git:https://github.com/ATATCTech/HSPS.git'
+                    url = 'https://github.com/ATATCTech/HSPS'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            name = "OSSRH"
+            if (project.version.toString().endsWith("-SNAPSHOT")) {
+                url = "https://s01.oss.sonatype.org/content/repositories/snapshots"
+            } else {
+                url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            }
+            credentials {
+                username = findProperty("ossrhUsername") ?: System.getenv("OSSRH_USERNAME")
+                password = findProperty("ossrhPassword") ?: System.getenv("OSSRH_PASSWORD")
+            }
+        }
+    }
+}
+
+signing {
+    sign(publishing.publications.mavenJava)
+}
+
 test {
     useJUnitPlatform()
+}
+
+jar {
+    manifest {
+        baseName 'testplugin'
+        version ''
+        attributes 'Main-Class': 'com.atatctech.hsps.TestPlugin'
+    }
 }

@@ -1,12 +1,14 @@
-package com.atatctech.hsps;
+package com.atatctech.hsps.verification;
 
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ElementType.LOCAL_VARIABLE, ElementType.PARAMETER})
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Puppet {
+public @interface Signed {
+    @NotNull String value();
 }
