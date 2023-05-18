@@ -85,10 +85,10 @@ signing {
     sign(publishing.publications.mavenJava)
 }
 
-jar {
-    manifest {
-        archivesBaseName 'testplugin'
-        version ''
-        attributes 'Main-Class': 'com.atatctech.hsps.TestPlugin'
-    }
-}
+//jar {
+//    manifest {
+//        archivesBaseName 'testplugin'
+//        version ''
+//        attributes 'Main-Class': 'com.atatctech.hsps.TestPlugin'
+//    }
+//}
