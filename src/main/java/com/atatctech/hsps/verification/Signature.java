@@ -7,7 +7,17 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
 
-public class Signature {
+/**
+ * Signature utils.
+ */
+public final class Signature {
+    /**
+     * Verify a class's signature.
+     * @param clz target class
+     * @param signature signature to be verified
+     * @param publicKey RSA public key
+     * @return true if verified; false if failed
+     */
     public static boolean verify(@NotNull Class<?> clz, @NotNull String signature, @NotNull ARSA.APublicKey publicKey) {
         try {
             return ARSA.verify(clz.getName(), signature, publicKey);
@@ -16,6 +26,12 @@ public class Signature {
         }
     }
 
+    /**
+     * Generate a signature.
+     * @param clz target class
+     * @param privateKey RSA private key
+     * @return generated signature
+     */
     public static @NotNull String sign(@NotNull Class<?> clz, @NotNull ARSA.APrivateKey privateKey) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
         return ARSA.sign(clz.getName(), privateKey);
     }

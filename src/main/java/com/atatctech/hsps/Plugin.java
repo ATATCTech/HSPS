@@ -10,20 +10,40 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 
+/**
+ * Plugin loader.
+ */
 public class Plugin {
     protected final @NotNull File file;
     protected final @NotNull String mainClass;
 
+    /**
+     * Create a plugin loader.
+     * @param file target file
+     * @param mainClass the entry class, such as `com.example.plugin.Plugin`
+     */
     public Plugin(@NotNull File file, @NotNull String mainClass) {
         this.file = file;
         this.mainClass = mainClass;
     }
 
+    /**
+     * Create a plugin loader.
+     * @param path path to target file
+     * @param mainClass the entry class, such as `com.example.plugin.Plugin`
+     */
     public Plugin(@NotNull String path, @NotNull String mainClass) {
         this.file = new File(path);
         this.mainClass = mainClass;
     }
 
+    /**
+     * Load plugin.
+     * @param verification verification method, set to null to disable verification
+     * @return the main class
+     * @throws ClassNotFoundException main class not found
+     * @throws VerificationError verification failed
+     */
     public @Nullable Class<?> load(@Nullable Verification verification) throws ClassNotFoundException, VerificationError {
         ClassLoader classLoader = ClassLoaderUtils.getClassLoader(file);
         if (classLoader == null) return null;
@@ -33,7 +53,14 @@ public class Plugin {
         return clz;
     }
 
-    public @Nullable Class<?> load(@NotNull ARSA.APublicKey publicKey) throws VerificationError, ClassNotFoundException {
+    /**
+     * Load plugin with default verification method, which is RSA signature.
+     * @param publicKey RSA public key
+     * @return the main class
+     * @throws ClassNotFoundException main class not found
+     * @throws VerificationError verification failed
+     */
+    public @Nullable Class<?> load(@NotNull ARSA.APublicKey publicKey) throws ClassNotFoundException, VerificationError {
         return load(clz -> {
             Signed signed = clz.getAnnotation(Signed.class);
             return signed != null && Signature.verify(clz, signed.value(), publicKey);
