@@ -24,8 +24,8 @@ public class HSPSTest {
 
     @Test
     public void test() throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, VerificationError, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        Plugin plugin = new Plugin("./build/libs/testplugin.jar", "com.atatctech.hsps.TestPlugin");
-        Class<?> clz = plugin.load(ARSA.APublicKey.importPublicKey(Basics.NativeHandler.readFile("./keys/pub.pem"), 2048));
+        PluginLoader pluginLoader = new PluginLoader("./build/libs/testplugin.jar", "com.atatctech.hsps.TestPlugin");
+        Class<?> clz = pluginLoader.load(ARSA.APublicKey.importPublicKey(Basics.NativeHandler.readFile("./keys/pub.pem"), 2048));
         if (clz != null) clz.getDeclaredMethod("run").invoke(null);
     }
 }
