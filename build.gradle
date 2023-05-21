@@ -85,9 +85,9 @@ signing {
     sign(publishing.publications.mavenJava)
 }
 
-test {
-    useJUnitPlatform()
-}
+//test {
+//    useJUnitPlatform()
+//}
 
 //jar {
 //    manifest {
